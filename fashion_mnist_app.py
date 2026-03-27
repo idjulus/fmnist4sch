@@ -136,7 +136,7 @@ with main:
         if "model" not in st.session_state:
             pred_area.info("Сначала обучи модель на вкладке **Обучение**.")
         else:
-            pred_btn = st.button("🤔 Предсказать", type="primary", use_container_width=True)
+            pred_btn = st.button("🤔 Предсказать", type="primary", width=200)
 
 # ─── Обучение ─────────────────────────────────────────────────────────────────
 if train_btn:
@@ -258,7 +258,7 @@ if train_btn:
     st.session_state["model"]       = model
     st.session_state["test_loader"] = test_loader
 
-    # ── Предсказания ──────────────────────────────────────────────────────────
+# ─── Предсказания ──────────────────────────────────────────────────────────────
 if pred_btn:
     pred_area.empty()
     model = st.session_state["model"]
@@ -288,8 +288,8 @@ if pred_btn:
             row=r + 1, col=c + 1
         )
         fig2.update_xaxes(showticklabels=False, row=r + 1, col=c + 1)
-        fig2.update_yaxes(showticklabels=False, row=r + 1, col=c + 1)
-        fig2.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1))
+        fig2.update_yaxes(showticklabels=False, row=r + 1, col=c + 1, scaleanchor="x", constrain="domain")
+        # fig2.update_layout(yaxis=dict(scaleanchor="x", constrain="domain"))
 
     correct_count = (preds == y_s).sum().item()
     fig2.update_layout(
