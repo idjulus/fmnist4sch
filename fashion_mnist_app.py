@@ -94,24 +94,24 @@ with sidebar:
         options=[0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05],
         value=0.001
     )
-    epochs = st.slider("Эпохи", 1, 10, 3)
+    epochs = st.slider("Эпохи", 1, 10, 1)
     batch_size = st.select_slider(
         "Размер батча",
         options=[32, 64, 128, 256, 512],
-        value=128
+        value=32
     )
     hidden_layers = st.slider("Скрытых слоёв", 1, 4, 2)
     neurons = st.select_slider(
         "Нейронов в слое",
         options=[64, 128, 256, 512],
-        value=256
+        value=64
     )
     dropout = st.slider("Dropout", 0.0, 0.5, 0.2, step=0.05)
     optimizer_name = st.selectbox("Оптимизатор", ["Adam", "SGD", "RMSprop"])
     subset_size = st.select_slider(
         "Размер обучающей выборки",
         options=[5_000, 10_000, 20_000, 60_000],
-        value=10_000,
+        value=5_000,
         help="5k ≈ 1 мин, 10k ≈ 2–3 мин, 60k ≈ 10–15 мин на CPU"
     )
 
@@ -135,6 +135,8 @@ with main:
         pred_area = st.empty()
         if "model" not in st.session_state:
             pred_area.info("Сначала обучи модель на вкладке **Обучение**.")
+        else:
+            pred_btn = st.button("🤔 Предсказать", type="primary", use_container_width=True)
 
 # ─── Обучение ─────────────────────────────────────────────────────────────────
 if train_btn:
@@ -257,9 +259,11 @@ if train_btn:
     st.session_state["test_loader"] = test_loader
 
     # ── Предсказания ──────────────────────────────────────────────────────────
+if pred_btn:
     pred_area.empty()
     model.eval()
     X_s, y_s = next(iter(test_loader))
+    id_samples = torch.
     X_s, y_s = X_s[:16], y_s[:16]
 
     with torch.no_grad():
@@ -283,6 +287,7 @@ if train_btn:
         )
         fig2.update_xaxes(showticklabels=False, row=r + 1, col=c + 1)
         fig2.update_yaxes(showticklabels=False, row=r + 1, col=c + 1)
+        fig2.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1))
 
     correct_count = (preds == y_s).sum().item()
     fig2.update_layout(
