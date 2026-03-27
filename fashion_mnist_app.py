@@ -263,7 +263,6 @@ if pred_btn:
     pred_area.empty()
     model.eval()
     X_s, y_s = next(iter(test_loader))
-    id_samples = torch.
     X_s, y_s = X_s[:16], y_s[:16]
 
     with torch.no_grad():
