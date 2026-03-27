@@ -261,7 +261,9 @@ if train_btn:
     # ── Предсказания ──────────────────────────────────────────────────────────
 if pred_btn:
     pred_area.empty()
+    model = st.session_state["model"]
     model.eval()
+    test_loader = st.session_state["test_loader"]
     X_s, y_s = next(iter(test_loader))
     X_s, y_s = X_s[:16], y_s[:16]
 
