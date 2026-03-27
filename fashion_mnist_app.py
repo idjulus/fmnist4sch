@@ -132,9 +132,8 @@ with main:
         metrics   = st.empty()
 
     with tab_pred:
+        pred_btn = st.button("🤔 Предсказать", type="secondary", width="content", use_container_width=False)
         pred_area = st.empty()
-        if "model" not in st.session_state:
-            pred_area.info("Сначала обучи модель на вкладке **Обучение**.")
 
 # ─── Обучение ─────────────────────────────────────────────────────────────────
 if train_btn:
@@ -256,15 +255,11 @@ if train_btn:
     st.session_state["model"]       = model
     st.session_state["test_loader"] = test_loader
 
-    pred_area.empty()
-    with tab_pred:
-        pred_btn = st.button("🤔 Предсказать", type="secondary", width=200)
-        st.session_state["pred_btn"] = pred_btn
-
 # ─── Предсказания ──────────────────────────────────────────────────────────────
-if "pred_btn" in st.session_state:
-    pred_btn = st.session_state["pred_btn"]
-    if pred_btn:
+if pred_btn:
+    if "model" not in st.session_state:
+        pred_area.info("Сначала обучи модель на вкладке **Обучение**.")
+    else:
         pred_area.empty()
         model = st.session_state["model"]
         model.eval()
