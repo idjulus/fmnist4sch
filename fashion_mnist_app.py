@@ -263,6 +263,7 @@ if train_btn:
 
 # ─── Предсказания ──────────────────────────────────────────────────────────────
 if "pred_btn" in st.session_state:
+    pred_btn = st.session_state["pred_btn"]
     if pred_btn:
         pred_area.empty()
         model = st.session_state["model"]
