@@ -133,6 +133,7 @@ with main:
 
     with tab_pred:
         pred_btn = st.button("🤔 Предсказать", type="secondary", width="content", use_container_width=False)
+        st.session_stat["pred_btn"] = pred_btn
         pred_area = st.empty()
 
 # ─── Обучение ─────────────────────────────────────────────────────────────────
@@ -288,8 +289,8 @@ if pred_btn:
                 row=r + 1, col=c + 1
             )
             fig2.update_xaxes(showticklabels=False, row=r + 1, col=c + 1)
-            fig2.update_yaxes(showticklabels=False, row=r + 1, col=c + 1, scaleanchor="x", constrain="domain")
-            # fig2.update_layout(yaxis=dict(scaleanchor="x", constrain="domain"))
+            fig2.update_yaxes(showticklabels=False, row=r + 1, col=c + 1)
+            fig2.update_layout(yaxis=dict(scaleanchor="x", constrain="domain"), row=r + 1, col=c+1)
     
         correct_count = (preds == y_s).sum().item()
         fig2.update_layout(
