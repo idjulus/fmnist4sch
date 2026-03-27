@@ -133,7 +133,7 @@ with main:
 
     with tab_pred:
         pred_area = st.empty()
-        pred_btn = st.button("🤔 Предсказать", type="primary", width=200)
+        pred_btn = st.button("🤔 Предсказать", type="secondary", width=200)
 
 # ─── Обучение ─────────────────────────────────────────────────────────────────
 if train_btn:
