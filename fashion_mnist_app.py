@@ -257,7 +257,8 @@ if train_btn:
     st.session_state["test_loader"] = test_loader
 
     pred_area.empty()
-    pred_btn = st.button("🤔 Предсказать", type="secondary", width=200)
+    with tab_pred:
+        pred_btn = st.button("🤔 Предсказать", type="secondary", width=200)
 
 # ─── Предсказания ──────────────────────────────────────────────────────────────
 if pred_btn:
