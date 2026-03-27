@@ -133,7 +133,8 @@ with main:
 
     with tab_pred:
         pred_area = st.empty()
-        pred_btn = st.button("🤔 Предсказать", type="secondary", width=200)
+        if "model" not in st.session_state:
+            pred_area.info("Сначала обучи модель на вкладке **Обучение**.")
 
 # ─── Обучение ─────────────────────────────────────────────────────────────────
 if train_btn:
@@ -255,47 +256,47 @@ if train_btn:
     st.session_state["model"]       = model
     st.session_state["test_loader"] = test_loader
 
+    pred_area.empty()
+    pred_btn = st.button("🤔 Предсказать", type="secondary", width=200)
+
 # ─── Предсказания ──────────────────────────────────────────────────────────────
 if pred_btn:
-    if "model" not in st.session_state:
-            pred_area.info("Сначала обучи модель на вкладке **Обучение**.")
-    else:
-        pred_area.empty()
-        model = st.session_state["model"]
-        model.eval()
-        test_loader = st.session_state["test_loader"]
-        X_s, y_s = next(iter(test_loader))
-        id_samples = torch.randint(0,len(X_s),(16,))
-        X_s, y_s = X_s[id_samples], y_s[id_samples]
-    
-        with torch.no_grad():
-            preds = model(X_s).argmax(1)
-    
-        cols = 4
-        rows_n = 4
-        titles = [
-            f"{'✅' if preds[i] == y_s[i] else '❌'} {CLASSES[preds[i].item()].split(' ', 1)[1]}"
-            for i in range(16)
-        ]
-        fig2 = sp.make_subplots(rows=rows_n, cols=cols, subplot_titles=titles)
-    
-        for i in range(16):
-            img = X_s[i].squeeze().numpy()
-            r, c = divmod(i, cols)
-            fig2.add_trace(
-                go.Heatmap(z=np.flipud(img), colorscale="gray",
-                           showscale=False, zmin=0, zmax=1),
-                row=r + 1, col=c + 1
-            )
-            fig2.update_xaxes(showticklabels=False, row=r + 1, col=c + 1)
-            fig2.update_yaxes(showticklabels=False, row=r + 1, col=c + 1, scaleanchor="x", constrain="domain")
-            # fig2.update_layout(yaxis=dict(scaleanchor="x", constrain="domain"))
-    
-        correct_count = (preds == y_s).sum().item()
-        fig2.update_layout(
-            title_text=f"16 примеров из тестовой выборки — верно: {correct_count}/16",
-            height=700,
-            margin=dict(l=10, r=10, t=60, b=10)
+    pred_area.empty()
+    model = st.session_state["model"]
+    model.eval()
+    test_loader = st.session_state["test_loader"]
+    X_s, y_s = next(iter(test_loader))
+    id_samples = torch.randint(0,len(X_s),(16,))
+    X_s, y_s = X_s[id_samples], y_s[id_samples]
+
+    with torch.no_grad():
+        preds = model(X_s).argmax(1)
+
+    cols = 4
+    rows_n = 4
+    titles = [
+        f"{'✅' if preds[i] == y_s[i] else '❌'} {CLASSES[preds[i].item()].split(' ', 1)[1]}"
+        for i in range(16)
+    ]
+    fig2 = sp.make_subplots(rows=rows_n, cols=cols, subplot_titles=titles)
+
+    for i in range(16):
+        img = X_s[i].squeeze().numpy()
+        r, c = divmod(i, cols)
+        fig2.add_trace(
+            go.Heatmap(z=np.flipud(img), colorscale="gray",
+                       showscale=False, zmin=0, zmax=1),
+            row=r + 1, col=c + 1
         )
-        with tab_pred:
-            pred_area.plotly_chart(fig2, use_container_width=True)
+        fig2.update_xaxes(showticklabels=False, row=r + 1, col=c + 1)
+        fig2.update_yaxes(showticklabels=False, row=r + 1, col=c + 1, scaleanchor="x", constrain="domain")
+        # fig2.update_layout(yaxis=dict(scaleanchor="x", constrain="domain"))
+
+    correct_count = (preds == y_s).sum().item()
+    fig2.update_layout(
+        title_text=f"16 примеров из тестовой выборки — верно: {correct_count}/16",
+        height=700,
+        margin=dict(l=10, r=10, t=60, b=10)
+    )
+    with tab_pred:
+        pred_area.plotly_chart(fig2, use_container_width=True)
