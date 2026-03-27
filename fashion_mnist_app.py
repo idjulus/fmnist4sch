@@ -288,9 +288,8 @@ if pred_btn:
                            showscale=False, zmin=0, zmax=1),
                 row=r + 1, col=c + 1
             )
-            fig2.update_xaxes(showticklabels=False, row=r + 1, col=c + 1)
-            fig2.update_yaxes(showticklabels=False, row=r + 1, col=c + 1)
-            fig2.update_layout(yaxis=dict(scaleanchor="x", constrain="domain"), row=r + 1, col=c+1)
+            fig2.update_xaxes(showticklabels=False, scaleanchor="y", constrain="domain", row=r + 1, col=c + 1)
+            fig2.update_yaxes(showticklabels=False, scaleanchor="x", constrain="domain", row=r + 1, col=c + 1)
     
         correct_count = (preds == y_s).sum().item()
         fig2.update_layout(
