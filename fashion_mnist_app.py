@@ -133,7 +133,7 @@ with main:
 
     with tab_pred:
         pred_btn = st.button("🤔 Предсказать", type="secondary", width="content", use_container_width=False)
-        st.session_stat["pred_btn"] = pred_btn
+        st.session_state["pred_btn"] = pred_btn
         pred_area = st.empty()
 
 # ─── Обучение ─────────────────────────────────────────────────────────────────
