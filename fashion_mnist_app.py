@@ -265,7 +265,8 @@ if pred_btn:
     model.eval()
     test_loader = st.session_state["test_loader"]
     X_s, y_s = next(iter(test_loader))
-    X_s, y_s = X_s[:16], y_s[:16]
+    id_samples = torch.torch.randint(0,len(X_s),16)
+    X_s, y_s = X_s[id_samples], y_s[id_samples]
 
     with torch.no_grad():
         preds = model(X_s).argmax(1)
